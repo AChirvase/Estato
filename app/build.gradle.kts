@@ -5,6 +5,7 @@ plugins {
     id("kotlinx-serialization")
     id("kotlin-kapt")
     id("io.gitlab.arturbosch.detekt")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -35,14 +36,46 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = "17"
     }
 
+    kotlin {
+        jvmToolchain(17)
+    }
+
+    detekt {
+        toolVersion = "1.23.0"
+        buildUponDefaultConfig = true
+        config.setFrom(files("detekt.yml"))
+        autoCorrect = true
+    }
+
+    ktlint {
+        debug.set(true)
+        verbose.set(true)
+        android.set(false)
+        outputToConsole.set(true)
+        ignoreFailures.set(false)
+        enableExperimentalRules.set(true)
+        reporters {
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
+    }
+
+    tasks.register("fixAll") {
+        group = "formatting"
+        description = "Auto-fix all Detekt and KtLint issues"
+        dependsOn("detekt", "ktlintFormat")
+    }
+
+    tasks.register("format") {
+        dependsOn("ktlintFormat")
+    }
 
     buildFeatures {
         compose = true
@@ -55,6 +88,20 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+        unitTests.all { test ->
+            test.useJUnitPlatform()
+            test.testLogging {
+                events("passed", "skipped", "failed", "standardOut", "standardError")
+                showStandardStreams = true
+            }
         }
     }
 }
@@ -114,8 +161,12 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
     testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
     testImplementation("app.cash.turbine:turbine:1.0.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 
     // Android Testing
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

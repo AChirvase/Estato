@@ -7,11 +7,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ListingViewModel @Inject constructor(
     interactor: ListingInteractor,
-    mapper: ListingMapper,
     reducer: ListingReducer
 ) : MviViewModel<ListingIntent, ListingResult, ListingViewState, ListingInteractor, ListingMapper, ListingReducer>(
     interactor = interactor,
-    mapper = mapper,
     reducer = reducer,
     initialState = initialListingViewState
 )

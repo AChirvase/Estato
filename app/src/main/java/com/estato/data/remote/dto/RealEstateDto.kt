@@ -17,7 +17,7 @@ data class RealEstateDto(
     val professional: String,
     val propertyType: String,
     val offerType: Int,
-    val rooms: Int,
+    val rooms: Int? = null,
     val bedrooms: Int? = null,
     val url: String? = null
 )

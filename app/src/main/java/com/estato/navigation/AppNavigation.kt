@@ -8,30 +8,23 @@ import androidx.navigation.compose.rememberNavController
 import com.estato.presentation.details.DetailsScreen
 import com.estato.presentation.listing.ListingScreen
 
-object Routes {
-    const val LISTING = "listing"
-    const val DETAILS = "details/{realEstateId}"
-
-    fun details(realEstateId: String) = "details/$realEstateId"
-}
-
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.LISTING
+        startDestination = "listing"
     ) {
-        composable(Routes.LISTING) {
+        composable("listing") {
             ListingScreen(
                 onNavigateToDetails = { realEstateId ->
-                    navController.navigate(Routes.details(realEstateId))
+                    navController.navigate("details/$realEstateId")
                 }
             )
         }
 
-        composable(Routes.DETAILS) { backStackEntry ->
+        composable("details/{realEstateId}") { backStackEntry ->
             val realEstateId = backStackEntry.arguments?.getString("realEstateId") ?: ""
             DetailsScreen(
                 realEstateId = realEstateId,

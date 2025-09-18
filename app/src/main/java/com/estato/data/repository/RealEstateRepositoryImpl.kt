@@ -7,7 +7,9 @@ import com.estato.domain.model.RealEstate
 import com.estato.domain.repository.RealEstateRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import retrofit2.HttpException
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,20 +31,24 @@ class RealEstateRepositoryImpl @Inject constructor(
 
         // First check cache
         val cachedEntity = dao.getRealEstateById(idInt)
-        if (cachedEntity != null) {
+        return cachedEntity?.let {
             Timber.d("Found real estate $id in cache")
-            return mapper.mapToDomain(cachedEntity)
-        }
+            mapper.mapToDomain(it)
+        } ?: fetchFromApi(idInt, id)
+    }
 
-        // If not in cache, fetch from API
+    private suspend fun fetchFromApi(idInt: Int, id: String): RealEstate? {
         return try {
             Timber.d("Fetching real estate $id from API")
             val dto = api.getRealEstateById(idInt)
             val entity = mapper.mapToEntity(dto)
             dao.insertRealEstate(entity)
             mapper.mapToDomain(entity)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to fetch real estate $id from API")
+        } catch (e: IOException) {
+            Timber.e(e, "Network error fetching real estate $id")
+            null
+        } catch (e: HttpException) {
+            Timber.e(e, "HTTP error fetching real estate $id")
             null
         }
     }
@@ -65,49 +71,58 @@ class RealEstateRepositoryImpl @Inject constructor(
             dao.insertRealEstates(entities)
 
             Timber.d("Cached ${entities.size} real estates")
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to refresh real estates from API")
+        } catch (e: IOException) {
+            Timber.e(e, "Network error refreshing real estates")
+            handleRefreshFailure()
+        } catch (e: HttpException) {
+            Timber.e(e, "HTTP error refreshing real estates")
+            handleRefreshFailure()
+        }
+    }
 
-            // If we have no cached data and API fails, insert mock data
-            val cachedCount = dao.getCount()
-            if (cachedCount == 0) {
-                Timber.d("No cached data and API failed, using mock data")
-                insertMockData()
-            }
+    private suspend fun handleRefreshFailure() {
+        val cachedCount = dao.getCount()
+        if (cachedCount == 0) {
+            Timber.d("No cached data and API failed, using mock data")
+            insertMockData()
         }
     }
 
     private suspend fun insertMockData() {
         val mockEntities = listOf(
-            mapper.mapToEntity(
-                com.estato.data.remote.dto.RealEstateDto(
-                    id = 1,
-                    city = "Paris",
-                    area = 120.0,
-                    price = 850000.0,
-                    professional = "GSL EXPLORE",
-                    propertyType = "Appartement",
-                    offerType = 1,
-                    rooms = 4,
-                    bedrooms = 2,
-                    url = "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400"
-                )
-            ),
-            mapper.mapToEntity(
-                com.estato.data.remote.dto.RealEstateDto(
-                    id = 2,
-                    city = "Lyon",
-                    area = 250.0,
-                    price = 1200000.0,
-                    professional = "GSL PREMIUM",
-                    propertyType = "Maison - Villa",
-                    offerType = 1,
-                    rooms = 6,
-                    bedrooms = 4,
-                    url = "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400"
-                )
-            )
+            createMockApartment(),
+            createMockVilla()
         )
         dao.insertRealEstates(mockEntities)
     }
+
+    private fun createMockApartment() = mapper.mapToEntity(
+        com.estato.data.remote.dto.RealEstateDto(
+            id = 1,
+            city = "Paris",
+            area = 120.0,
+            price = 850000.0,
+            professional = "GSL EXPLORE",
+            propertyType = "Appartement",
+            offerType = 1,
+            rooms = 4,
+            bedrooms = 2,
+            url = "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400"
+        )
+    )
+
+    private fun createMockVilla() = mapper.mapToEntity(
+        com.estato.data.remote.dto.RealEstateDto(
+            id = 2,
+            city = "Lyon",
+            area = 250.0,
+            price = 1200000.0,
+            professional = "GSL PREMIUM",
+            propertyType = "Maison - Villa",
+            offerType = 1,
+            rooms = 6,
+            bedrooms = 4,
+            url = "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400"
+        )
+    )
 }

@@ -1,8 +1,11 @@
 {
-  "enableAllProjectMcpServers": false,
   "permissions": {
     "allow": [
-      "WebFetch(domain:gsl-apps-technical-test.dignp.com)"
+      "WebFetch(domain:gsl-apps-technical-test.dignp.com)",
+      "Bash(./gradlew:*)",
+      "Read(//Library/Java/JavaVirtualMachines/**)",
+      "Bash(java:*)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": false
 }

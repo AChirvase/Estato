@@ -1,4 +1,5 @@
-NEVER MODIFY THIS FILE YOURSELF
+NEVER MODIFY THIS FILE YOURSELF. READ ONLY.
+Always check the latest version of this file.
 
 Name: Estato
 Project purpose: android app for real estates
@@ -7,39 +8,67 @@ Description: android app with 2 main screens:
 	- Details page : a details page allowing you to explore each item of the list previously created.
 
 
-Techstack
+################   Techstack    ################
 
-Language 	Kotlin
-	Architecture 	MVI + Clean Architecture
+Language
+	Kotlin
+	Architecture
+	MVI + Clean Architecture
 
-UI 	Jetpack Compose
-	Build System 	Gradle (Kotlin DSL)
+UI
+	Jetpack Compose
+	Build System
+	Gradle (Kotlin DSL)
 
-Asynchronous / Reactive 	Kotlin Coroutines + Flow
+Asynchronous / Reactive
+	Kotlin Coroutines + Flow
 
-Dependency Injection 	Hilt (Dagger)
+Dependency Injection
+	Hilt (Dagger)
 
-Navigation 	Jetpack Navigation Component Compose
+Navigation
+	Jetpack Navigation Component Compose
 
-Networking 	Retrofit 	OkHttp 	Kotlinx.serialization
-	Charles 	Certificate Pinning
+Networking
+	Retrofit
+	OkHttp
+	Kotlinx.serialization
+	Charles
+	Certificate Pinning
 
-Data Persistence 	Room
-	Jetpack DataStore 	In-memory caching
+Data Persistence
+	Room
+	Jetpack DataStore
+	In-memory caching
 
-Media 	Coil 
+Media
+	Coil 
 
-Firebase & Remote Config 	Firebase Remote Config 	Firebase A/B Testing
+Firebase & Remote Config
+	Firebase Remote Config
+	Firebase A/B Testing
 
-Testing 	JUnit5 	MockK 	Turbine 	Espresso + Compose Testing 	Paparazzi
+Testing
+	JUnit5
+	MockK
+	Turbine
+	Espresso + Compose Testing
+	Paparazzi
 
-Code Quality & CI 	Detekt + KtLint 	SonarQube 	Android Lint
+Code Quality & CI
+	Detekt + KtLint
+	SonarQube
+	Android Lint
 
-Security 	Keystore-backed AES encryption 	Secure wrappers for Room and DataStore
-	Logging / Debugging 	Timber for logging
+Security
+	Keystore-backed AES encryption
+	Secure wrappers for Room and DataStore
+	Logging / Debugging
+	Timber for logging
 
 
-MVI + Clean Architecture rules
+################   MVI + Clean Architecture rules    ################ 
+
 1. Layering
 	* Data → API, DB, cache, repositories implementations only.
 	* Domain → UseCases, pure models, repository interfaces.
@@ -78,3 +107,26 @@ MVI + Clean Architecture rules
 	* KtLint + Detekt.
 	* Consistent naming. Ex: MyScreenInteractor, MyScreenViewModel, MyScreenReducer, MyFeatureSomething
 	* Core = abstractions/utilities only.
+
+
+
+################   Code Rules    ################ 
+
+MagicNumber
+MaxLineLength 120
+LongMethod 30
+LargeClass 500
+TooManyFunctions 15
+TooManyParameters 6
+ComplexCondition 4
+DuplicateCaseInWhenExpression
+UnnecessarySafeCall
+UnsafeCallOnNullableType
+EmptyCatchBlock
+UnusedImports
+LateinitUsage
+ExplicitItLambdaParameter
+EqualsOnSignatureLine
+
+
+After finalizing the task, run "./gradlew fixAll" max 3 times. Make sure to fix as much as possible of the error logs

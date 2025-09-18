@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class MviViewModel<I : MviIntent, R : MviResult, VS : MviViewState, Interactor : MviInteractor<I, R>, Mapper : MviMapper<*, *>, Reducer : MviReducer<R, VS>>(
+abstract class MviViewModel<I : MviIntent, R : MviResult, VS : MviViewState,
+    Interactor : MviInteractor<I, R>, Mapper : MviMapper<*, *>, Reducer : MviReducer<R, VS>>(
     private val interactor: Interactor,
-    private val mapper: Mapper,
     private val reducer: Reducer,
     initialState: VS
 ) : ViewModel() {

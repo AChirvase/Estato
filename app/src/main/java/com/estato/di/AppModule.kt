@@ -3,6 +3,7 @@ package com.estato.di
 import android.content.Context
 import androidx.room.Room
 import com.estato.data.local.dao.RealEstateDao
+import com.estato.data.local.database.DatabaseMigrations
 import com.estato.data.local.database.EstatoDatabase
 import com.estato.data.remote.api.RealEstateApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -47,7 +48,9 @@ object AppModule {
         context,
         EstatoDatabase::class.java,
         EstatoDatabase.DATABASE_NAME
-    ).build()
+    ).addMigrations(DatabaseMigrations.MIGRATION_1_2)
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Provides
     fun provideRealEstateDao(database: EstatoDatabase): RealEstateDao =
