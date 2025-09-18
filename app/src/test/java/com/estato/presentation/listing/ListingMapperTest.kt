@@ -21,18 +21,18 @@ class ListingMapperTest {
         // Given
         val domainModel = RealEstate(
             id = "1",
-            title = "Modern Villa",
+            title = "Maison - Villa in Villers-sur-Mer",
             description = "Beautiful villa",
-            price = 850000.0,
-            currency = "USD",
-            location = "Miami Beach",
+            price = 1500000.0,
+            currency = "EUR",
+            location = "Villers-sur-Mer",
             imageUrl = "villa.jpg",
             type = RealEstateType.VILLA,
             bedrooms = 4,
             bathrooms = 3,
-            area = 300.0,
+            area = 250.0,
             isForSale = true,
-            contactInfo = ContactInfo("Sarah", "555-0123", "sarah@test.com")
+            contactInfo = ContactInfo("GSL EXPLORE", "+33 1 00 00 00 00", "gsl.explore@gsl.com")
         )
 
         // When
@@ -40,13 +40,13 @@ class ListingMapperTest {
 
         // Then
         assertEquals("1", result.id)
-        assertEquals("Modern Villa", result.title)
-        assertEquals("Miami Beach", result.location)
-        assertEquals("$850,000.00", result.price)
+        assertEquals("Maison - Villa in Villers-sur-Mer", result.title)
+        assertEquals("Villers-sur-Mer", result.location)
+        assertEquals("€1,500,000.00", result.price)
         assertEquals("villa.jpg", result.imageUrl)
         assertEquals("Villa", result.type)
         assertEquals(4, result.bedrooms)
         assertEquals(3, result.bathrooms)
-        assertEquals("300 m²", result.area)
+        assertEquals("250 m²", result.area)
     }
 }

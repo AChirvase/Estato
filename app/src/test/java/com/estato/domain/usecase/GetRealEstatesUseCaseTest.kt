@@ -47,7 +47,7 @@ class GetRealEstatesUseCaseTest {
         coEvery { repository.getRealEstates() } returns flowOf(realEstates)
 
         // When
-        val result = useCase().toList()
+        val result = useCase.execute().toList()
 
         // Then
         assertEquals(1, result.size)

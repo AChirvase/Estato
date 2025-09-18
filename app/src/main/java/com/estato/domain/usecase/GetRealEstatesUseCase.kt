@@ -7,8 +7,9 @@ import javax.inject.Inject
 
 class GetRealEstatesUseCase @Inject constructor(
     private val repository: RealEstateRepository
-) {
-    operator fun invoke(): Flow<List<RealEstate>> {
+) : GetRealEstatesUseCaseInterface {
+
+    override fun execute(): Flow<List<RealEstate>> {
         return repository.getRealEstates()
     }
 }

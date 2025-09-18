@@ -28,9 +28,15 @@ class DetailsMapper @Inject constructor() : MviMapper<RealEstate, RealEstateDeta
     }
 
     private fun formatPrice(price: Double, currency: String): String {
-        val formatter = NumberFormat.getCurrencyInstance(Locale.US)
         return when (currency.uppercase()) {
-            "USD" -> formatter.format(price)
+            "USD" -> {
+                val formatter = NumberFormat.getCurrencyInstance(Locale.US)
+                formatter.format(price)
+            }
+            "EUR" -> {
+                val formatter = NumberFormat.getCurrencyInstance(Locale.FRANCE)
+                formatter.format(price)
+            }
             else -> "$currency ${NumberFormat.getInstance().format(price)}"
         }
     }

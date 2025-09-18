@@ -1,13 +1,14 @@
 package com.estato.data.remote.api
 
+import com.estato.data.remote.dto.ListingsResponseDto
 import com.estato.data.remote.dto.RealEstateDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface RealEstateApi {
-    @GET("real-estates")
-    suspend fun getRealEstates(): List<RealEstateDto>
+    @GET("listings.json")
+    suspend fun getRealEstates(): ListingsResponseDto
 
-    @GET("real-estates/{id}")
-    suspend fun getRealEstateById(@Path("id") id: String): RealEstateDto
+    @GET("listings/{id}.json")
+    suspend fun getRealEstateById(@Path("id") id: Int): RealEstateDto
 }

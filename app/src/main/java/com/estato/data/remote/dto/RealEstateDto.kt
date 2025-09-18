@@ -3,25 +3,21 @@ package com.estato.data.remote.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RealEstateDto(
-    val id: String,
-    val title: String,
-    val description: String,
-    val price: Double,
-    val currency: String,
-    val location: String,
-    val imageUrl: String,
-    val type: String,
-    val bedrooms: Int,
-    val bathrooms: Int,
-    val area: Double,
-    val isForSale: Boolean,
-    val contactInfo: ContactInfoDto
+data class ListingsResponseDto(
+    val items: List<RealEstateDto>,
+    val totalCount: Int
 )
 
 @Serializable
-data class ContactInfoDto(
-    val agentName: String,
-    val phoneNumber: String,
-    val email: String
+data class RealEstateDto(
+    val id: Int,
+    val city: String,
+    val area: Double,
+    val price: Double,
+    val professional: String,
+    val propertyType: String,
+    val offerType: Int,
+    val rooms: Int,
+    val bedrooms: Int? = null,
+    val url: String? = null
 )

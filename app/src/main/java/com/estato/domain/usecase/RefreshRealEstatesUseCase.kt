@@ -5,8 +5,9 @@ import javax.inject.Inject
 
 class RefreshRealEstatesUseCase @Inject constructor(
     private val repository: RealEstateRepository
-) {
-    suspend operator fun invoke() {
+) : RefreshRealEstatesUseCaseInterface {
+
+    override suspend fun execute() {
         repository.refreshRealEstates()
     }
 }

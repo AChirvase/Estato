@@ -1,7 +1,7 @@
 package com.estato.presentation.details
 
 import com.estato.core.mvi.MviInteractor
-import com.estato.domain.usecase.GetRealEstateByIdUseCase
+import com.estato.domain.usecase.GetRealEstateByIdUseCaseInterface
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class DetailsInteractor @Inject constructor(
-    private val getRealEstateByIdUseCase: GetRealEstateByIdUseCase,
+    private val getRealEstateByIdUseCase: GetRealEstateByIdUseCaseInterface,
     private val mapper: DetailsMapper
 ) : MviInteractor<DetailsIntent, DetailsResult> {
 
@@ -22,7 +22,7 @@ class DetailsInteractor @Inject constructor(
 
     private fun loadRealEstateDetails(id: String): Flow<DetailsResult> {
         return flow {
-            val realEstate = getRealEstateByIdUseCase(id)
+            val realEstate = getRealEstateByIdUseCase.execute(id)
             if (realEstate != null) {
                 val uiModel = mapper.mapToScreenData(realEstate)
                 emit(DetailsResult.Success(uiModel))

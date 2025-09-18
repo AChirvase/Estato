@@ -6,8 +6,9 @@ import javax.inject.Inject
 
 class GetRealEstateByIdUseCase @Inject constructor(
     private val repository: RealEstateRepository
-) {
-    suspend operator fun invoke(id: String): RealEstate? {
+) : GetRealEstateByIdUseCaseInterface {
+
+    override suspend fun execute(id: String): RealEstate? {
         return repository.getRealEstateById(id)
     }
 }
